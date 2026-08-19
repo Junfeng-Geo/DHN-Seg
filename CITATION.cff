@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "This work is in preparation. Please contact the authors before citing preliminary results."
+title: "DHN-Seg: Expert-Guided Difficulty-Aware Neural Tissue Segmentation in Endoscopic Spine Surgery"
+type: software
+authors:
+  - family-names: Li
+    given-names: Qinghua
+  - family-names: Jiang
+    given-names: Junfeng
+    email: jiangjf@hhu.edu.cn
+  - family-names: Zhang
+    given-names: Xueze
+  - family-names: Zhang
+    given-names: Guinan
+  - family-names: Chai
+    given-names: Junyan
+  - family-names: Wu
+    given-names: Yumeng
+  - family-names: Shen
+    given-names: Guodao
+  - family-names: Lu
+    given-names: Weilin
+  - family-names: Ying
+    given-names: Jie
+  - family-names: Zhao
+    given-names: Feiyu
+  - family-names: Huang
+    given-names: Duo
+  - family-names: Zheng
+    given-names: Hua
+  - family-names: Wang
+    given-names: Shuai
+  - family-names: Zhang
+    given-names: Jian
+  - family-names: Sun
+    given-names: Jingjing
+  - family-names: Wang
+    given-names: Bo
+  - family-names: Sun
+    given-names: Fei
+  - family-names: Wang
+    given-names: Feng
+  - family-names: Luo
+    given-names: Xiaobo
+  - family-names: Nong
+    given-names: Luming
+repository-code: "https://github.com/Junfeng-Geo/DHN-Seg"
+license: "proprietary"
