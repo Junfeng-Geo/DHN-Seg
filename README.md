@@ -2,7 +2,7 @@
 
 **Expert-Guided Difficulty-Aware Neural Tissue Segmentation in Endoscopic Spine Surgery**
 
-This repository hosts the public, patient-safe project page for an ongoing study of neural tissue segmentation in endoscopic spine surgery. The current primary static teacher uses DINOv3-L with UPerNet. The project also investigates difficult positive and negative examples, continuous-video behavior, temporal boundary stability, and teacher-to-student distillation for real-time deployment.
+This repository hosts the public, patient-safe project page for an ongoing study of high-precision neural tissue segmentation in static endoscopic spine surgery frames. The current implementation uses DINOv3-L with UPerNet and explicitly learns from expert-defined clear and difficult positive and negative examples.
 
 ## Project page
 
@@ -12,8 +12,8 @@ The public static page is located in [`docs/`](docs/) and is ready for GitHub Pa
 
 - Pixel-level, two-center dataset construction is ongoing.
 - Case-level train, validation, and test separation is used.
-- DINOv3-L + UPerNet is the current static teacher.
-- Generic SAM2 propagation shows boundary instability and requires domain adaptation.
+- DINOv3-L + UPerNet is the current implementation.
+- Difficulty-balanced sampling, hard-pixel learning, prototype separation, and boundary supervision are under evaluation.
 - Results are preliminary and have not been clinically validated.
 
 ## Data and model release
