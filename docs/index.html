@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DHN-Seg: expert-guided difficulty-aware neural tissue segmentation in endoscopic spine surgery.">
+  <title>DHN-Seg | Project Page</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="topbar" aria-label="Project navigation">
+    <a class="wordmark" href="#top">DHN-Seg</a>
+    <div class="navlinks">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#dataset">Dataset</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header class="paper-header">
+      <p class="venue-line">Research preview · manuscript in preparation</p>
+      <h1><span>DHN-Seg:</span> Expert-Guided Difficulty-Aware Neural Tissue Segmentation in Endoscopic Spine Surgery</h1>
+      <div class="authors" aria-label="Authors">
+        <span>Qinghua Li<sup>1</sup></span>
+        <a href="mailto:jiangjf@hhu.edu.cn">Junfeng Jiang<sup>1,#</sup></a>
+        <span>Xueze Zhang<sup>1</sup></span>
+        <span>Guinan Zhang<sup>1</sup></span>
+        <span>Junyan Chai<sup>1</sup></span>
+        <span>Yumeng Wu<sup>1</sup></span>
+        <span>Guodao Shen<sup>1</sup></span>
+        <span>Weilin Lu<sup>1</sup></span>
+        <span>Jie Ying<sup>1</sup></span>
+        <span>Feiyu Zhao<sup>2</sup></span>
+        <span>Duo Huang<sup>2</sup></span>
+        <span>Hua Zheng<sup>2</sup></span>
+        <span>Shuai Wang<sup>2</sup></span>
+        <span>Jian Zhang<sup>2</sup></span>
+        <span>Jingjing Sun<sup>2</sup></span>
+        <span>Bo Wang<sup>2</sup></span>
+        <span>Fei Sun<sup>2</sup></span>
+        <span>Feng Wang<sup>3</sup></span>
+        <span>Xiaobo Luo<sup>2,#</sup></span>
+        <span>Luming Nong<sup>4,#</sup></span>
+      </div>
+      <p class="affiliations">
+        <span><sup>1</sup>College of Artificial Intelligence and Automation, Hohai University, Nanjing, China</span>
+        <span><sup>2</sup>Chinese PLA General Hospital, Beijing, China</span>
+        <span><sup>3</sup>Tuodao Medical Technology Co., Ltd., Nanjing, China</span>
+        <span><sup>4</sup>The Third Affiliated Hospital of Nanjing Medical University, Changzhou, China</span>
+        <small><sup>#</sup>Corresponding authors: Junfeng Jiang, Xiaobo Luo, and Luming Nong.</small>
+      </p>
+      <div class="resource-row" aria-label="Project resources">
+        <span class="resource pending"><b>Paper</b><small>In preparation</small></span>
+        <span class="resource pending"><b>Code</b><small>Planned release</small></span>
+        <span class="resource pending"><b>Dataset</b><small>Ethics pending</small></span>
+        <a class="resource" href="mailto:jiangjf@hhu.edu.cn"><b>Contact</b><small>jiangjf@hhu.edu.cn</small></a>
+      </div>
+    </header>
+
+    <section class="status-band" aria-label="Public preview status">
+      <strong>Patient-safe public preview</strong>
+      <span>This page contains aggregate research information only. Patient-derived images, videos, labels, and weights are withheld pending ethics and institutional approval.</span>
+    </section>
+
+    <section class="section" id="abstract">
+      <div class="section-heading"><span>01</span><h2>Abstract</h2></div>
+      <div class="prose two-col-copy">
+        <p>Accurate neural tissue segmentation is an important perception capability for navigation and robotic assistance in endoscopic spine surgery. The task is difficult because neural structures deform, have weak boundaries, and may be obscured by blood, surgical instruments, ligamentum flavum, and epidural fat. Vascularized disc tissue and specular reflections can also resemble neural tissue and cause clinically undesirable false positives.</p>
+        <p>DHN-Seg studies a high-precision static semantic teacher with explicit supervision for difficult positive and difficult negative evidence. The framework combines field-of-view-aware preprocessing, a general feature encoder and mask decoder, difficulty-balanced sampling, hard-pixel learning, prototype separation, and boundary supervision. This static model is designed both as a deployable frame-level recognizer and as a semantic anchor for future continuous-video segmentation.</p>
+      </div>
+    </section>
+
+    <section class="section method-section" id="method">
+      <div class="section-heading"><span>02</span><h2>Method overview</h2></div>
+      <p class="lead">The method gives additional learning capacity to the cases that matter most clinically: subtle neural tissue, confusing background structures, and uncertain boundaries.</p>
+      <div class="pipeline" aria-label="DHN-Seg training pipeline">
+        <div class="pipe-node input"><span>Input</span><b>FOV-aware frame</b><small>Endoscopic image with non-FOV background suppressed</small></div>
+        <div class="pipe-arrow" aria-hidden="true">→</div>
+        <div class="pipe-node encoder"><span>Representation</span><b>Feature encoder</b><small>DINOv3-L in the current implementation</small></div>
+        <div class="pipe-arrow" aria-hidden="true">→</div>
+        <div class="pipe-node decoder"><span>Prediction</span><b>Mask decoder</b><small>UPerNet multi-scale feature fusion</small></div>
+        <div class="pipe-arrow" aria-hidden="true">→</div>
+        <div class="pipe-node output"><span>Output</span><b>Neural probability</b><small>Binary mask, boundary, and confidence</small></div>
+      </div>
+
+      <div class="difficulty-layout">
+        <div class="difficulty-axis">
+          <div class="axis-title"><b>Expert-defined frame groups</b><span>Frame-level context guides sampling and loss construction.</span></div>
+          <div class="axis-grid">
+            <div class="difficulty clear-pos"><b>Clear positive</b><small>Visible neural tissue with reliable boundaries</small></div>
+            <div class="difficulty hard-pos"><b>Difficult positive</b><small>Confirmed neural tissue with weak or partial evidence</small></div>
+            <div class="difficulty clear-neg"><b>Clear negative</b><small>Background without neural tissue</small></div>
+            <div class="difficulty hard-neg"><b>Difficult negative</b><small>Disc vessels, fat vessels, or specular reflections</small></div>
+          </div>
+        </div>
+        <div class="loss-stack" aria-label="Training objectives">
+          <div><span>A</span><p><b>Balanced sampling</b><small>Prevents easy repeated frames from dominating training.</small></p></div>
+          <div><span>B</span><p><b>Hard-pixel learning</b><small>Emphasizes missed foreground and high-confidence false positives.</small></p></div>
+          <div><span>C</span><p><b>Prototype separation</b><small>Pulls neural features together and pushes confusing background apart.</small></p></div>
+          <div><span>D</span><p><b>Boundary supervision</b><small>Improves contour agreement in weak and partially obscured regions.</small></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="results">
+      <div class="section-heading"><span>03</span><h2>Preliminary results</h2></div>
+      <p class="lead">All splits are separated at the patient level. Checkpoint and threshold selection use the validation case only; the independent case remains untouched during model selection.</p>
+      <div class="metric-strip" aria-label="Headline evaluation metrics">
+        <div><strong>0.8946</strong><span>Validation Dice</span></div>
+        <div><strong>0.6998</strong><span>Independent-test Dice</span></div>
+        <div><strong>0.8840</strong><span>Test precision</span></div>
+        <div><strong>7.03%</strong><span>Test negative FPR</span></div>
+      </div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Static segmentation results">
+        <table>
+          <thead><tr><th>Split</th><th>Dice ↑</th><th>Precision ↑</th><th>Recall ↑</th><th>Boundary F1 ↑</th><th>Negative FPR ↓</th></tr></thead>
+          <tbody>
+            <tr><td>Same-center validation · Case 6</td><td>0.8946</td><td>0.8656</td><td>0.9256</td><td>0.5705</td><td>9.26%</td></tr>
+            <tr><td>Independent test · Case 16</td><td>0.6998</td><td>0.8840</td><td>0.5792</td><td>0.3411</td><td>7.03%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="video-summary">
+        <div>
+          <span class="kicker">Continuous-video pilot</span>
+          <h3>Static accuracy does not automatically produce temporally stable video masks.</h3>
+        </div>
+        <p>Six 24 FPS clips were used to compare framewise inference with several SAM2 propagation strategies. DINOv3-L + UPerNet produced the smoothest spatial boundary in qualitative review, while generic SAM2 required further domain adaptation. Patient-derived demonstrations remain available only on the team server.</p>
+      </div>
+      <div class="table-wrap compact" tabindex="0" role="region" aria-label="Continuous video pilot summary">
+        <table>
+          <thead><tr><th>Method</th><th>Positive Dice ↑</th><th>Recall ↑</th><th>Boundary F1 ↑</th><th>Negative FPR ↓</th><th>Pipeline FPS ↑</th></tr></thead>
+          <tbody>
+            <tr><td>Framewise DINO</td><td>0.725</td><td>0.743</td><td>0.175</td><td>10.3%</td><td>8.57</td></tr>
+            <tr><td>DINO 1 FPS + causal SAM2</td><td>0.735</td><td>0.771</td><td>0.203</td><td>31.0%</td><td>15.09</td></tr>
+            <tr><td>DINO 1 FPS + bidirectional SAM2</td><td>0.760</td><td>0.800</td><td>0.207</td><td>44.8%</td><td>13.89</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section dataset-section" id="dataset">
+      <div class="section-heading"><span>04</span><h2>Dataset and review protocol</h2></div>
+      <div class="dataset-grid">
+        <div class="cohort-number"><strong>18</strong><span>planned surgical cases</span><small>Two clinical centers · 1 FPS pixel-level annotation</small></div>
+        <div class="review-flow">
+          <div><b>8 annotators</b><span>Pixel-level masks created in CVAT</span></div>
+          <i aria-hidden="true">→</i>
+          <div><b>7 clinicians</b><span>Initial clinical review and correction</span></div>
+          <i aria-hidden="true">→</i>
+          <div><b>1 senior clinician</b><span>Final review until annotation convergence</span></div>
+        </div>
+      </div>
+      <div class="ethics-note">
+        <b>Responsible release</b>
+        <p>The cohort is under active annotation and review. Patient-derived material will not be released until ethics approval, institutional authorization, and an appropriate data-governance plan are in place. Current results are preliminary and are not intended for clinical use.</p>
+      </div>
+    </section>
+
+    <section class="section citation-section" id="citation">
+      <div class="section-heading"><span>05</span><h2>Citation</h2></div>
+      <p class="lead">The manuscript is in preparation. Please contact the authors before citing preliminary results.</p>
+      <pre><code>@misc{li2026dhnseg,
+  title  = {DHN-Seg: Expert-Guided Difficulty-Aware Neural Tissue
+            Segmentation in Endoscopic Spine Surgery},
+  author = {Li, Qinghua and Jiang, Junfeng and Zhang, Xueze and others},
+  year   = {2026},
+  note   = {Manuscript in preparation}
+}</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <div><b>DHN-Seg</b><span>Hohai University · PLA General Hospital · Changzhou No. 2 People's Hospital</span></div>
+    <a href="mailto:jiangjf@hhu.edu.cn">jiangjf@hhu.edu.cn</a>
+  </footer>
+</body>
+</html>
