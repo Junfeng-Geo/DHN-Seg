@@ -68,7 +68,7 @@
       <div class="section-heading"><span>01</span><h2>Abstract</h2></div>
       <div class="prose two-col-copy">
         <p>Accurate neural tissue segmentation is an important perception capability for navigation and robotic assistance in endoscopic spine surgery. The task is difficult because neural structures deform, have weak boundaries, and may be obscured by blood, surgical instruments, ligamentum flavum, and epidural fat. Vascularized disc tissue and specular reflections can also resemble neural tissue and cause clinically undesirable false positives.</p>
-        <p>DHN-Seg studies a high-precision static semantic teacher with explicit supervision for difficult positive and difficult negative evidence. The framework combines field-of-view-aware preprocessing, a general feature encoder and mask decoder, difficulty-balanced sampling, hard-pixel learning, prototype separation, and boundary supervision. This static model is designed both as a deployable frame-level recognizer and as a semantic anchor for future continuous-video segmentation.</p>
+        <p>DHN-Seg studies high-precision semantic segmentation of static endoscopic frames with explicit supervision for difficult positive and difficult negative evidence. The framework combines field-of-view-aware preprocessing, a general feature encoder and mask decoder, difficulty-balanced sampling, hard-pixel learning, prototype separation, and boundary supervision. It outputs a neural-tissue probability map and a binary pixel-level mask for each input frame.</p>
       </div>
     </section>
 
@@ -119,24 +119,6 @@
           <tbody>
             <tr><td>Same-center validation · Case 6</td><td>0.8946</td><td>0.8656</td><td>0.9256</td><td>0.5705</td><td>9.26%</td></tr>
             <tr><td>Independent test · Case 16</td><td>0.6998</td><td>0.8840</td><td>0.5792</td><td>0.3411</td><td>7.03%</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="video-summary">
-        <div>
-          <span class="kicker">Continuous-video pilot</span>
-          <h3>Static accuracy does not automatically produce temporally stable video masks.</h3>
-        </div>
-        <p>Six 24 FPS clips were used to compare framewise inference with several SAM2 propagation strategies. DINOv3-L + UPerNet produced the smoothest spatial boundary in qualitative review, while generic SAM2 required further domain adaptation. Patient-derived demonstrations remain available only on the team server.</p>
-      </div>
-      <div class="table-wrap compact" tabindex="0" role="region" aria-label="Continuous video pilot summary">
-        <table>
-          <thead><tr><th>Method</th><th>Positive Dice ↑</th><th>Recall ↑</th><th>Boundary F1 ↑</th><th>Negative FPR ↓</th><th>Pipeline FPS ↑</th></tr></thead>
-          <tbody>
-            <tr><td>Framewise DINO</td><td>0.725</td><td>0.743</td><td>0.175</td><td>10.3%</td><td>8.57</td></tr>
-            <tr><td>DINO 1 FPS + causal SAM2</td><td>0.735</td><td>0.771</td><td>0.203</td><td>31.0%</td><td>15.09</td></tr>
-            <tr><td>DINO 1 FPS + bidirectional SAM2</td><td>0.760</td><td>0.800</td><td>0.207</td><td>44.8%</td><td>13.89</td></tr>
           </tbody>
         </table>
       </div>
